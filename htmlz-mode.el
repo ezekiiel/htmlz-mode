@@ -1,10 +1,11 @@
-;;; htmlz --- Simple real-time Emacs html preview
+;;; htmlz-mode.el --- Simple real-time Emacs html preview -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2020 Zeke Medley
 
 ;; Author: Zeke Medley <zekemedley@gmail.com>
 ;; Keywords: html
-;; Version: 0.1
+;; Version: 0.3
+;; Package-Requires: ((websocket "1.14"))
 ;; URL: https://github.com/ZekeMedley/htmlz
 
 ;;; Commentary:
@@ -18,18 +19,9 @@
 ;;
 ;;; Code:
 
-(defun require-package (package)
-  "Install given PACKAGE if it was not installed before."
-  (if (package-installed-p package)
-      t
-    (progn
-      (unless (assoc package package-archive-contents)
-	(package-refresh-contents))
-      (package-install package))))
-
 (defun htmlz-init-dependencies ()
   "Initialize htmlz dependencies."
-  (require-package 'websocket)
+  (require 'websocket)
   (require 'package)
   (require 'browse-url)
   (require 'websocket))
@@ -106,6 +98,7 @@ document.body.innerHTML = event.data;
   (delete-file (htmlz-get-filename))
   (remove-hook 'post-command-hook 'htmlz-send-buffer-contents 'local))
 
+;;;###autoload
 (define-minor-mode htmlz-mode
   "The htmlz minor mode"
   :lighter " htmlz"
@@ -117,4 +110,4 @@ document.body.innerHTML = event.data;
     (htmlz-start)))
 
 (provide 'htmlz-mode)
-;;; htmlz.el ends here
+;;; htmlz-mode.el ends here
